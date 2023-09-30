@@ -20,6 +20,8 @@ const createUser = asyncHandler(async(req , res) =>{
   }
 })
 
+//Login User
+
 const loginUserCtrl = asyncHandler(async (req, res) =>{
   const {email , password} =req.body
   const findUser = await User.findOne({email});
@@ -37,6 +39,29 @@ const loginUserCtrl = asyncHandler(async (req, res) =>{
     throw new Error("Invalid User")
   }
 })
+
+//Update User
+
+const updatedUser = asyncHandler(async (req,res)=>{
+  const {id} = req.params
+  try{
+     const updatedUser =await User.findByIdAndUpdate(id,{
+      firstname: req?.body?.firstname,
+      lastname: req?.body?.lastname,
+      email: req?.body?.email,
+      mobile: req?.body?.mobile,
+      password: req?.body?.password
+     },
+     {
+      new:true,
+     });
+     res.json(updatedUser)
+  }
+  catch(error){
+    throw new Error(error)
+  }
+})
+
 
 //Get All User
 const getallUser = asyncHandler(async (req,res)=>{
@@ -68,7 +93,7 @@ const getaUser = asyncHandler(async(req,res)=>{
 const deleteaUser = asyncHandler(async(req,res)=>{
   const {id} = req.params;
   try{
-    const deleteaUser = await User.findById(id);
+    const deleteaUser = await User.findByIdAndDelete(id);
     res.json({
       deleteaUser,
     })
@@ -79,4 +104,4 @@ const deleteaUser = asyncHandler(async(req,res)=>{
 });
 
 
-module.exports={createUser,loginUserCtrl, getallUser,getaUser,deleteaUser}
+module.exports={createUser,loginUserCtrl, getallUser,getaUser,deleteaUser,updatedUser}

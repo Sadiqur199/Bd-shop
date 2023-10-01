@@ -3,6 +3,7 @@ const User= require('../modals/UserModels')
 const asyncHandler = require('express-async-handler');
 const validateMongoDbId = require('../utills/validateMongodbid');
 const { generateRefreshToken } = require('../config/refreshToken');
+const jwt = require("jsonwebtoken")
 
 
 //create a user
@@ -55,13 +56,47 @@ const loginUserCtrl = asyncHandler(async (req, res) =>{
 
 
 //handle refresh token
-
 const handleRefreshToken = asyncHandler(async (req,res)=>{
-
+const cookie = req.cookies;
+if(!cookie?.refreshToken) throw new Error ('No Refresh Token In Cookies');
+const refreshToken = cookie.refreshToken;
+const user = await User.findOne({ refreshToken })
+if(!user) throw new Error('No Refresh Token Present in db or not matched');
+jwt.verify(refreshToken,process.env.JWT_Secret,(err,decode) =>{
+  if(err || user.id !== decode.id){
+    throw new Error("There is something wrong with refresh token")
+  }
+const accessToken = generateRefreshToken(user?._id)
+res.json({accessToken})
+})
 })
 
-//Update User
+//logout functionality
+const logout = asyncHandler(async (req,res) =>{
+const cookie = req.cookies
+if (!cookie?.refreshToken) throw new Error("No Refresh Token In Cookies");
+const refreshToken = cookie.refreshToken;
+const user = await User.findOne({ refreshToken })
+if(!user){
+  res.clearCookie("refreshToken",{
+    httpOnly:true,
+    secure:true,
+  });
+  return res.sendStatus(204) //forbidden
+}
+const updateuser = await User.findByIdAndUpdate(user.id, {
+  refreshToken: "",
+}, { new: true });
 
+res.clearCookie("refreshToken",{
+  httpOnly:true,
+  secure:true,
+});
+ res.sendStatus(204)
+});
+
+
+//Update User
 const updatedUser = asyncHandler(async (req,res)=>{
   // console.log(req.user)
   const {_id} = req.user;
@@ -171,4 +206,4 @@ const unblockUser = asyncHandler(async (req,res) =>{
 })
 
 
-module.exports={createUser,loginUserCtrl, getallUser,getaUser,deleteaUser,updatedUser,blockUser,unblockUser,handleRefreshToken}
+module.exports={createUser,loginUserCtrl, getallUser,getaUser,deleteaUser,updatedUser,blockUser,unblockUser,handleRefreshToken,logout}

@@ -7,9 +7,11 @@ DBConnect()
 const AuthRouter = require('./routes/AuthRoute');
 const bodyParser = require('body-parser');
 const { notFound, errorHandler } = require('./middleware/errorHandel');
+const cookieParser = require('cookie-parser')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
+app.use(cookieParser())
 
 app.use('/api/user',AuthRouter)
 

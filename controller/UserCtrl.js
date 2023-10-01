@@ -2,6 +2,7 @@ const { generateToken } = require('../config/jwtToken');
 const User= require('../modals/UserModels')
 const asyncHandler = require('express-async-handler');
 const validateMongoDbId = require('../utills/validateMongodbid');
+const { generateRefreshToken } = require('../config/refreshToken');
 
 
 //create a user
@@ -28,6 +29,16 @@ const loginUserCtrl = asyncHandler(async (req, res) =>{
   const {email , password} =req.body
   const findUser = await User.findOne({email});
   if(findUser && await findUser.isPasswordMatched(password)){
+
+    const refreshToken = await generateRefreshToken(findUser?._id)
+     const updateuser = await User.findByIdAndUpdate(findUser.id,{
+      refreshToken:refreshToken,
+    },{new:true});
+    res.cookie('refreshToken',refreshToken,{
+      httpOnly:true,
+      maxAge:72*60*60*1000,
+    })
+
    res.json({
     _id: findUser?._id,
     firstname: findUser?.firstname,
@@ -40,6 +51,13 @@ const loginUserCtrl = asyncHandler(async (req, res) =>{
   else{
     throw new Error("Invalid User")
   }
+})
+
+
+//handle refresh token
+
+const handleRefreshToken = asyncHandler(async (req,res)=>{
+
 })
 
 //Update User
@@ -153,4 +171,4 @@ const unblockUser = asyncHandler(async (req,res) =>{
 })
 
 
-module.exports={createUser,loginUserCtrl, getallUser,getaUser,deleteaUser,updatedUser,blockUser,unblockUser}
+module.exports={createUser,loginUserCtrl, getallUser,getaUser,deleteaUser,updatedUser,blockUser,unblockUser,handleRefreshToken}

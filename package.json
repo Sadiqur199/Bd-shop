@@ -30,6 +30,8 @@
     "express-async-handler": "^1.2.0",
     "express-handlebars": "^7.1.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.5.2"
+    "mongoose": "^7.5.2",
+    "morgan": "^1.10.0",
+    "slugify": "^1.6.6"
   }
 }

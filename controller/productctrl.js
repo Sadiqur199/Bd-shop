@@ -32,6 +32,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
+
 const deleteProduct = asyncHandler(async (req, res) => {
   const id = req.params.id;
   try {
@@ -57,7 +58,10 @@ const getaProduct = asyncHandler(async (req,res) =>{
 
 const getAllProduct = asyncHandler(async (req,res) =>{
   try{
-   const getallProducts = await Product.find();
+   const getallProducts = await Product.find({
+    brand: req.query.brand,
+    category:req.query.category,
+   });
    res.json(getallProducts)
   }
   catch(error){

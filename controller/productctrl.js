@@ -90,7 +90,6 @@ const getAllProduct = asyncHandler(async (req,res) =>{
          query = query.select('-__v')
       }
 
-
       //Pagination
       const page = req.query.page;
       const limit = req.query.limit;

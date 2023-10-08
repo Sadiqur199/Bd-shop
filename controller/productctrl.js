@@ -1,7 +1,7 @@
 const Product = require('../modals/productModal')
 const asyncHandler = require("express-async-handler") 
 const slugify = require("slugify")
-
+const validateMongoDbId = require('../utills/validateMongodbid');
 
 const createProduct = asyncHandler(async(req,res)=>{
   try{

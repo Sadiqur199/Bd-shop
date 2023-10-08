@@ -1,0 +1,1 @@
+const Blog = require('../modals/blogModal')

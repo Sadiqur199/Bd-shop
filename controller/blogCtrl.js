@@ -139,7 +139,6 @@ validateMongoDbId(blogId)
   );
 
   if (alreadyLiked) {
-    // Update the blog with dislikes removed and isDisliked set to false
     const updatedBlog = await Blog.findByIdAndUpdate(
       blogId,
       {

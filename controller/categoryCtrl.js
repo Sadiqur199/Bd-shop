@@ -4,7 +4,8 @@ const validateMongoDbId = require('../utills/validateMongodbid');
 
 const createCategory = asyncHandler(async(req,res) =>{
   try{
-
+   const newCategory = await Category.create(req.body);
+   res.json(newCategory)
   }
   catch(error){
     throw new Error(error)
@@ -12,4 +13,4 @@ const createCategory = asyncHandler(async(req,res) =>{
 })
 
 
-module.exports = {}
+module.exports = {createCategory}

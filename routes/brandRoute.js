@@ -1,13 +1,13 @@
 const express = require("express")
-const { createCategory, updateCategory, deleteCategory, getCategory, getallCategory } = require("../controller/blogCatCtrl")
+const { createBrand, updateBrand, deleteBrand, getBrand, getallBrand } = require("../controller/brandCtrl")
 const { authMiddleware, isAdmin } = require("../middleware/AuthMiddleware")
 const router = express.Router()
 
 
-router.post("/",authMiddleware,isAdmin, createCategory)
-router.put("/:id",authMiddleware,isAdmin, updateCategory)
-router.delete("/:id",authMiddleware,isAdmin,deleteCategory)
-router.get('/:id',getCategory)
-router.get('/',getallCategory)
+router.post("/",authMiddleware,isAdmin, createBrand)
+router.put("/:id",authMiddleware,isAdmin, updateBrand)
+router.delete("/:id",authMiddleware,isAdmin,deleteBrand)
+router.get('/:id',getBrand)
+router.get('/',getallBrand)
 
 module.exports = router

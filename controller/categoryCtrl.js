@@ -51,8 +51,8 @@ const getCategory = asyncHandler(async(req,res) =>{
 const getallCategory = asyncHandler(async(req,res) =>{
 
   try{
-   const getACategory = await Category.findById(id);
-   res.json(getACategory)
+   const getAllCategory = await Category.find();
+   res.json(getAllCategory)
   }
   catch(error){
     throw new Error(error)

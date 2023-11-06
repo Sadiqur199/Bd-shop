@@ -29,7 +29,6 @@ app.use('/api/blogcategory',blogCategoryRouter)
 app.use(notFound)
 app.use(errorHandler)
 
-
 app.listen(PORT , ()=>{
   console.log(`Server is running PORT ${PORT}`)
 })
